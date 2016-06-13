@@ -19,7 +19,19 @@
 
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-The abstract goes here.
+Since the advent of multicore processors developers struggle with the parallelization
+of legacy software. Automatic methods are appropriate to identify parallelism on
+instruction level or simple loops. However, a scalable refactoring additionally requires
+profound comprehension of the given software architecture and its dynamic aspects. This
+leads to a rising demand for interactive tools to foster parallelization at various
+granularity levels. To alleviate this problem, we propose a visualization framework, and
+two tailored views for parallelism detection. This framework builds upon Parceive, our
+tool that utilizes dynamic binary instrumentation to trace C/C++/C\# programs. The
+cooperative views allow the identification and analysis of potential parallelism
+scenarios. Seamless navigation, abstraction, and filtering ensure an effective aid in
+comprehending legacy software. In this paper, we motivate our approach, illustrate the
+architecture of our visualization framework, and highlight the key features of our
+views. A case study shows the usefulness of Parceive.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -28,18 +40,59 @@ Computer Society, IEEE, IEEEtran, journal, \LaTeX, paper, template.
 
 \maketitle
 
-
 \IEEEdisplaynontitleabstractindextext
 \IEEEpeerreviewmaketitle
 
 \section{Introduction}
 \label{sec:introduction}
+The advent of multicore processors still poses a big challenge to the industry and
+the research community. To exploit the increasing processing power of such systems
+software parallelism is indispensable. As a result, software vendors are forced to
+parallelize their legacy software to make them scalable. Such a parallelization
+relies on two essential steps. The first step is to sufficiently comprehend the
+given software structure and its dynamic behaviour. The second step is a potential
+redesign of the software architecture that enables parallelism. Unfortunately, both
+steps are tedious and error-prone so that most of the legacy software still operates
+sequentially. Besides the additional complexity of parallel programming, we believe
+the problem largely arises due to a lack of appropriate tool support.
 
-\section{Parallelization}
-\label{sec:parallelization}
+\todo{[Paragraph about dynamic analysis vs. static approaches]}
+
+\todo{[Paragraph about contributions]}
+
+\todo{[Paragraph about outline]}
 
 \section{Parceive}
 \label{sec:parceive}
+We implemented Parceive, a tracing-based tool for interactive software
+analysis. Its vision is to aid developers with identifying parallelism opportunities
+on various granularity levels. Parceive utilizes static binary analysis and dynamic
+instrumentation to collect trace data. Being less conservative than pure static
+approaches let us focus on concurrency-related events, e.g., memory accesses, routine
+invocations, and object instantiations. A-posteriori abstraction of such fine-grained
+information enables to infer architectural aspects of user applications. Here is the
+difference to most existing tools, the results may be used as a starting point for an
+extensive architecture refactoring. However, the user is responsible for a correct
+parallelization due to the inherent incompleteness of dynamic analysis.
+
+The visualization component of Parceive is the user's key to comprehend and parallelize
+their applications. The component allows to grasp complex system behaviour by providing
+selective views for different viewpoints. Each view tries to simplify and
+highlight specific aspects of the traced software. Examples are a performance view to
+detect hotspots, or a function view that depicts memory dependencies between functions.
+The biggest challenge when dealing with runtime traces is the potentially overwhelming
+amount of data. Often such traces lead to unmanageable visualizations with unpractical
+delays. We address this problem by providing three key services to each view. The first
+service allows on-demand loading of arbitrary trace data and its caching for reuse
+across views. Most importantly, this service enables users to navigate and explore
+their software. The second service is the abstraction of fine-grained trace information
+to high-level entities, e.g., from single function invocations to call-groups, or from
+objects to classes. Such abstractions allow to comprehend software by using scalable
+top-down approaches. The third service comprises a communication infrastructure for
+sharing arbitrary state across multiple views. This service can be used to spot and
+restrict the current range of view to crucial points in the trace.  Equipped with all
+these services (and additional, highly optimized queries) the visualization component
+allows scalable views for software analysis.
 
 \subsection{System Architecture}
 \label{sec:system_architecture}
