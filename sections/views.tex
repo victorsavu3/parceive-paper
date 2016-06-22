@@ -1,0 +1,103 @@
+\section{Views}
+
+\subsection{Source View}
+
+The source view is the simplest visualization developed for Parceive. It shows
+the highlighted source code in a file that was used to build the instrumented
+application.
+
+The usefulness of this view only becomes apparent when it is communicating with
+the others presented in this paper. The simplest interaction is focusing and it
+allows the source view to pinpoint the definition of functions an loops making
+it easy to follow the execution of a program trough the source code.
+
+Hovering is able to provide additional information about entities. For calls it
+can indicate where the call originated and for memory references where they
+were allocated and referenced.
+
+\subsection{Calling context tree View}
+
+The CCT View is a visualization that allows an user to easily comprehend the
+dynamic behavior of an application. It can display and easily navigate Calls,
+Loops and References.
+
+The first node present when the view is created is the call to \texttt{main}.
+The user can then expand it like any other call by clicking or using the
+context menu. When a function is called multiple times the calls are grouped
+into a CallGroup to reduce the number of nodes displayed. CallGroups can be
+easily decomposed into their Calls by using the context menu.
+
+Loops can be visually identified by icons on nodes. When a loop icon is present
+on the right side of a node then that node contains one or more loops. These
+loops can be added to the visualization by using the context menu. A icon on
+the left side indicates that the call has been made from inside a loop.
+Navigating loop executions and loop iterations is similar to calls and allows
+the user to see information at any granularity he desires.
+
+CallGroups, Calls, LoopExecutions and LoopIterations are positioned using the
+D3 tree layout. Children of a node are always sorted by their start time. This
+positioning of nodes creates a clear indicator of the relationship between
+them.
+
+References accessed by parts of the application can be displayed by using the
+context menu. These nodes are difficult to integrate as part of a graph layout
+and are positioned using a force simulation around the rest of the tree.
+
+This view has some additional features that aim to help a developer parallelize
+code:
+
+\begin{itemize}
+	\item Profiling information is present as the node color
+	\item References shared between nodes can be easily identified
+	\item It is easy to expand the references accessed during the inclusive
+execution of a call or callgroup
+	\item A specialized query that only display the shared references between
+nodes
+\end{itemize}
+
+\section{Performance View}
+\label{sec:performance_view}
+The performance view provides an interactive visualization of a program's
+profiling and event trace data. Its primary purpose is to assist users in
+identifying scenarios that could potentially improve performance, by employing
+parallel programming as an optimization solution. Tracing and profiling data
+provide valuable material for detailed analysis on how a program behaves at
+runtime, and presenting a wholistic view of this data in an easy to digest
+visualization, can help users quickly comprehend the program, spot potential
+performance bottlenecks, and help guide optimization efforts.
+
+Two visualization modes are provided in the performance view: Tracing, and
+profiling. The tracing mode presents a hierarchical view of calls made during
+the execution of a program. The calls are arranged from left to right
+chronologically, and the visibility of the loop information for each call with
+a loop execution can be toggled on/off. The trace visualization is useful for
+detailed examination of a program, especially where the sequence in which
+calls were made is important. The profiling mode presents the user with a
+hierarchical view of the functions called during a program's execution. The
+length of each function in the view is dictated by the sum of the duration of
+calls made to it. The profiling visualization is often sufficient to pinpoint
+load imbalance due to problem decomposition and/or identify the origin of
+excessive communication time.
+
+As a program grows in size and complexity, the performance data also grows, and
+becomes harder to digest all at once. Which is why the performance view
+provides call zooming and runtime duration filtering features, to help the user
+adjust the view to different data granularity levels. Runtime duration
+filtering is a feature that sets the minimum runtime duration required for a
+call to be loaded unto the view. The minimum runtime duration value is gotten
+by calculating a specified percentage of the runtime duration of the current
+top-level call in the view. This feature allows the view render only calls
+large enough to be easily visible. With the call zooming feature, a user can
+focus the view on a specific call, which then makes it the top-level call,
+re-computes a new minimum runtime duration, and loads any child calls of the
+focused call that wasn't visible due to the previous runtime duration
+constraint.
+
+The view is built and deployed on the visualization framework that is part of
+the Parcieve UI. The visualization framework provides a platform for the view
+to be delivered to the web, and it also provides an API through which
+performance data for a program can be accessed. The performance view is able to
+interact with other views on Parceive, by leveraging the event API provided by
+the visualization framework. Through the event API, the performance view is
+able to broadcast relevant data to other views when calls and loops are hovered
+over with the mouse pointer, selected, or zoomed into.
