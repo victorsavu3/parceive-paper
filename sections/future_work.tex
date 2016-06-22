@@ -1,0 +1,26 @@
+\section{Future Work}
+\label{sec:future_work}
+Parceive was developed using a data-centric approach, where the initial project
+phase focused on fine-grained trace data and its visualization. In the second
+project phase, we will apply abstraction on this data to gain architectural
+insights for software comprehension and parallelization. Additional knowledge
+from software architects and developers will be incorporated to specify
+software components. This knowledge can then be used for extended views that
+depict the structure of systems and their behaviour on architecture level.
+
+Currently, our visualization is lacking some capabilities to precisely
+interpret the view contents. One such feature is the relation between view
+nodes and the corresponding regions in the user source code. Hence, we will
+provide a source code view and enable to focus on arbitrary regions. A concrete
+example is the inspection of data dependencies, where the user can focus on
+the memory access instructions in the code. Another missing feature is the
+support of already multi-threaded applications. Possible uses-cases are
+scalability analyses or validations, e.g., to identify possible race
+conditions. We plan to integrate these features in the next release.
+
+We reviewed the visualization framework and the presented views by applying 
+them on a few open and closed source applications. Main attention has been paid
+to the scalability of the framework and to the effectiveness of the views.
+However, there are more tests with software at industrial scale necessary to
+elicit possible scaling problems. We plan to focus on an extensive set of
+sequential user applications with decent parallelism potential.

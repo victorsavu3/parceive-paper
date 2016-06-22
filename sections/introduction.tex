@@ -1,0 +1,36 @@
+\section{Introduction}
+\label{sec:introduction}
+Multicore processors still poses a big challenge to the industry and the
+research community. To exploit the increasing processing power of such
+processors software parallelism is indispensable. As a result, software vendors
+are forced to parallelize their legacy software to make them scalable. Such a
+parallelization relies on two essential steps. The first step is to
+sufficiently comprehend the given software design and its dynamic behaviour.
+The second step is a potential redesign of the software architecture that
+enables parallelism. Unfortunately, both steps are tedious and error-prone so
+that most of the legacy software still operates sequentially. Besides the
+additional complexity of parallel programming, we believe the problem largely
+arises due to a lack of appropriate tool support.
+
+In the field of reverse engineering, software analysis tools are invaluable to
+understand the structural and behavioral aspects of software systems. These
+tools gather necessary data using static (at compilation time) or dynamic
+(at runtime) analysis approaches and effectively visualize this data. Dynamic
+analysis yields precise information about concrete runtime events. Static
+Analysis conservatively reasons over possible behaviors by examining system
+artifacts, e.g., source code. It has been cited that hybrid approaches are well
+suited to provide good accuracy and soundness of the
+analyses~\cite{StaticDynamic}. We implemented Parceive, a tool that combines
+static and dynamic analyses to provide effective vies for
+parallelization~\cite{Parceive}.
+
+In this paper, we present a visualization framework and two views for Parceive.
+Our framework enables efficient analyses on large traces to answer elaborate
+user queries. We further support an easy integration of tailored views by
+providing a common interface to them. This allows us to address a variety of
+viewpoints without writing highly specific analyses. Various optimization and
+abstraction techniques in the visualization framework ensure responsiveness and
+scalability, e.g., by on-demand loading, caching, trace abstraction, or
+communication across views. The two views we present enable users to detect
+hotspots, infer parallelization strategies, and validate these strategies
+regarding data dependencies.
