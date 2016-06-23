@@ -1,6 +1,6 @@
 \section{Parceive}
 \label{sec:parceive}
-We implemented Parceive, a tracing-based tool for interactive software
+We implemented Parceive \cite{Parceive}, a tracing-based tool for interactive software
 analysis. Its vision is to aid developers with identifying parallelism
 opportunities on various granularity levels. Parceive utilizes static binary
 analysis and dynamic instrumentation to collect trace data. Being less
@@ -14,7 +14,7 @@ parallelization due to the inherent incompleteness of dynamic analysis.
 
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[width=0.45\textwidth]{img/parceive}
+		\includegraphics[width=0.40\textwidth]{img/parceive}
 		\caption{Components of Parceive}
 		\label{fig:parceive_overview}
 	\end{center}
@@ -37,4 +37,7 @@ During such events Parceive collects trace data and efficiently writes it into
 an SQLite database. The underlying database scheme enables highly specific and
 performant queries for visualizations. The visualization component is the key
 to comprehend and parallelize user applications. It lets user grasp complex
-system behaviour by providing views for multiple viewpoints.
+system behaviour by providing views for multiple viewpoints. It consists of a
+visualization framework and several views that are based on the framework. Each
+view simplifies and highlights specific aspects of the traced software. We
+elaborate this in more detail in the next section.
