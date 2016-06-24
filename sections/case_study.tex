@@ -29,11 +29,6 @@ memory accesses.
 
 \begin{lstlisting}[caption=A major region for loop-parallelism in the
 EMSim code, label=listing:playEM]
-/* play group phase and final phase of an EM */
-void playEM(team_t** teams) {
-  team_t* successors[NUM_SUCCESSORS] = {0};
-  team_t* bestThirds[NUM_GROUPS] = {0};
-
   // play groups
   for (int g = 0; g < NUM_GROUPS; ++g) {
     playGroup(
@@ -43,7 +38,6 @@ void playEM(team_t** teams) {
       bestThirds + g
     );
   }
-...
 \end{lstlisting}
 
 We applied Parceive on EMSim by tracing the optimized user binaries (gcc
@@ -61,16 +55,7 @@ that \texttt{main()} spends most of the time in the invocation of
 \texttt{playEM()}. Within this function call, the execution time is mainly
 spent in two loops. The first loop (the one from Listing \ref{listing:playEM})
 performs the group phase. The second loop plays the final rounds, starting from
-the round of 16 to the final match. 
-
-\todo{put the main purposes for the trace view to the specific place}
-\iffalse
-When focusing on parallelism, the users can gain two major insights by looking
-at the trace view. One insight is the identification of hotspots to tell which
-regions of the user application are worth parallelizing them. After some
-parallel regions have been chosen, the other insight is to estimate the
-resulting load balance.
-\fi
+the round of 16 to the final match.
 
 Recall the two main purposes of the trace view, identifying hotspots
 and estimating load balance. In the case of EMSim, the view indicates the
@@ -99,8 +84,9 @@ accesses the stack variables \texttt{goals1} and \texttt{goals2}.
 Furthermore, the cct view enables to localize these memory accesses such that
 the dependencies can be investigated and synchronized.
 
-Even though the data dependencies for the first parallelization strategy can
-be easily avoided, we focus on the other strategy that put the calls to
+
+Even though the data dependencies for the first parallelization strategy
+can be easily avoided, we focus on the other strategy that put the calls to
 \texttt{playMatchGeneral()} in distinct tasks. The respective CCT view is shown
 in Figure \ref{fig:emsim}. Performing the same dependency analysis as
 before returns no shared memory accesses between the calls. Hence, the user
@@ -110,12 +96,3 @@ master-worker pattern. A student solution achieved a speedup of 6.5 on our
 and the control dependent matches of the final phase (e.g., the semi-final has 
 to be played before the final), this speedup confirms Amdahl's law. This result
 concludes that our views are very helpful to parallelize user applications.
-
-\begin{figure*}[ht!]
-	\begin{center}
-		\includegraphics[clip, trim=0cm 7.0cm 0cm 0cm,
-width=\linewidth]{img/emsim_overview.pdf}
-		\caption{Components of Parceive}
-		\label{fig:emsim}
-	\end{center}
-\end{figure*}
