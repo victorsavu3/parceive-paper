@@ -1,17 +1,17 @@
 \section{Parceive}
 \label{sec:parceive}
-We implemented Parceive, a tracing-based tool for interactive software
-analysis~\cite{Parceive}. Its vision is to aid developers with identifying
-parallelism opportunities on various granularity levels. Parceive utilizes
-static binary analysis and dynamic instrumentation to collect trace data. Being
-less conservative than purely static approaches let us focus on
-concurrency-related events, e.g., memory accesses, routine invocations, and
-object instantiations. By a-posteriori abstraction of such fine-grained
-information we infer architectural aspects of user applications. Here is the
-difference to most existing tools, the results may be used as a starting point
-for an extensive architecture refactoring. However, the user is responsible for
-a correct parallelization due to the inherent incompleteness of dynamic
-analysis.
+%We implemented Parceive, a tracing-based tool for interactive software
+%analysis~\cite{Parceive}. 
+The vision behind Parceive is to help developers in identifying parallelism
+opportunities and obstacles at various granularity levels. It utilizes static
+binary analysis and dynamic instrumentation to collect trace data. Being less
+conservative than purely static approaches lets us focus on concurrency-related
+events, e.g., memory accesses, routine invocations, and object instantiations.
+By a-posteriori abstraction of such fine-grained information, we infer
+architectural aspects from the applications. 
+The results can be used as a starting point for architecture redesign and
+refactoring. However, due to the inherent incompleteness of dynamic analysis,
+the user is responsible for correct parallelization.
 
 \begin{figure}[h!]
 	\begin{center}
@@ -22,23 +22,19 @@ analysis.
 \end{figure}
 
 Figure \ref{fig:parceive_overview} depicts the fundamental components of
-Parceive and its relations. Our analyses operate on user applications in
-binary form to generate trace data. These analyses can be classified into ones
-applied statically and during runtime. The former inspect the data- and
-control-flow of single linkage objects. By incorporating given debug
-information, static analyses enable our tool to infer global properties, e.g.,
-stack variables and their accesses, loop constructs, or class hierarchies.
-Additionally, the gathered knowledge is used to tailor the scope of the
-subsequent runtime analyses to reduce the execution overhead.
+Parceive and their relations. Our analyses operate on executables to retrieve
+the required information. These analyses can be classified into static and
+dynamic ones. The former inspect the data- and control-flow of single linkage
+objects. By incorporating debug symbols, static analysis enables our tool to
+gather information about variable accesses, loop constructs, and class
+hierarchies. Additionally, the gathered information is used to restrict the
+scope of subsequent runtime analysis in order to reduce the execution overhead.
 
-The runtime analyses instrument and inspect predefined events during actual
-executions of the user applications, e.g., object instantiations, method
-invocations, or thread handling (in case of multi-threaded user applications).
-During such events, Parceive collects trace data and efficiently writes it into
-a file-based database. The underlying database scheme enables highly specific
-and performant queries for visualizations. The visualization component is the
-key to comprehend and parallelize user applications. It lets user grasp complex
-system behavior by providing views for multiple viewpoints. It consists of a
-visualization infrastructure and several views that are based on the
-infrastructure. Each view simplifies and highlights specific aspects of the
-traced software. We elaborate this in more detail in the next section.
+The runtime analysis instruments and inspects predefined events during
+execution of an application, e.g., object instantiations, method invocations,
+and thread handling (in case of multi-threaded applications). During such
+events, Parceive collects trace data and stores it in an SQL database. The
+database scheme enables highly specific and performant queries for different
+visualizations which are key for program comprehension and parallelization.
+Each view thereby simplifies and highlights specific aspects of the traced
+software.

@@ -1,36 +1,37 @@
 \section{Introduction}
 \label{sec:introduction}
-Multicore processors still poses a big challenge to the industry and the
-research community. To exploit the increasing computing power of such
-processors software parallelism is indispensable. As a result, software vendors
-are forced to parallelize their legacy software to make them scalable. Such a
-parallelization relies on two essential steps. The first step is to
-sufficiently comprehend the given software structure and its dynamic behavior.
-The second step is a potential redesign of the software architecture that
-enables parallelism. Unfortunately, both steps are tedious and error-prone so
-that most of the legacy applications still operates sequentially. Besides the
-additional complexity of parallel programming, we believe the problem largely
-arises due to a lack of appropriate tool support.
+Multicore processors still pose a big challenge to the industry and the
+research community. The increasing computing power of such processors can only
+be exploited by parallel software. As a result, software and system vendors
+are forced to parallelize their legacy applications to make them scalable. Such
+a parallelization relies on two essential steps. The first step is to
+comprehend the software's structure as well as its dynamic behavior. The second
+step is a potential redesign of the software to enable parallelism.
+Unfortunately, both steps are tedious and error-prone for which reason most
+legacy applications still operate sequentially. Besides the additional
+complexity of parallel programming, we believe the problem largely arises from
+a lack of appropriate tools that support developers and architects in analyzing
+their software.
 
 In the field of reverse engineering, software analysis tools are invaluable to
-understand the structural and behavioral aspects of software systems. These
+understand the structural and behavioral aspects of complex software. These
 tools gather necessary data using static (at compilation time) or dynamic
-(at runtime) analysis approaches and effectively visualize this data. Dynamic
-analysis yields precise information about concrete runtime events. Static
-Analysis conservatively reasons over possible behaviors by examining system
-artifacts, e.g., source code. It has been cited that hybrid approaches are well
-suited to provide good accuracy and soundness of the
-analyses~\cite{StaticDynamic}. We implemented Parceive, a tool that combines
-static and dynamic analyses to provide effective views for
+(at runtime) analysis approaches and visualize this data for manual
+interpretation. Dynamic analysis yields precise information about concrete
+runtime events, whereas static analysis conservatively reasons over possible
+behaviors by examining the source code. It has been reported that hybrid
+approaches provide high accuracy and soundness of the
+analyses~\cite{StaticDynamic}. We implemented a tool called \emph{Parceive}
+that combines static and dynamic analyses to provide effective views for
 parallelization~\cite{Parceive}.
 
-In this paper, we present a visualization framework and three views for
-Parceive. Our framework enables efficient analyses on large traces to answer
-elaborate user queries. We further support an easy integration of tailored
-views by providing a common interface to them. This allows us to address a
-variety of viewpoints without writing highly specific analyses. Various
-optimization and abstraction techniques in the visualization infrastructure
-ensure responsiveness and scalability, e.g., by on-demand loading, caching,
-trace abstraction, or communication across views. The two views we present
-enable users to detect hotspots, infer parallelization strategies, and validate
-these strategies regarding data dependencies.
+In the following, we present the underlying visualization framework and
+selected views of Parceive. Our framework enables efficient analyses on large
+traces to answer elaborate user queries. We further support an easy integration
+of tailored views by providing a common interface to them. This allows to
+address a variety of viewpoints without writing highly specific analyses.
+Various optimization and abstraction techniques in the visualization
+infrastructure ensure responsiveness and scalability, e.g., by on-demand
+loading, caching, trace abstraction, and communication across views. The views
+we present enable users to detect hotspots, infer parallelization strategies,
+and validate these strategies regarding data dependencies.
