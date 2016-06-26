@@ -1,13 +1,13 @@
 \section{Related Work}
 \label{sec:related_work}
-Trace visualization has a long history for analyzing software
+Trace visualization has a long history in analyzing software
 parallelism~\cite{TraceVisualization}. Current visualizations are able to
 handle up to $10^7$ events or terabytes of trace data~\cite{State}. However,
 most of the cited methods achieve these numbers only for statistical plots or
 by averaging pixels. Others gain scalable views at the expense of limited
 usability, e.g., by requiring users to extensively pan across detailed trace
 data. Our tool tries to create the sweet spot between full abstraction and
-largely unprocessed details by a more interactive approach.
+largely unprocessed details through a more interactive approach.
 
 Vampir and HPCToolkit are well known tools from the performance community. They
 provide visualization environments to represent performance data~\cite{Vampir,
@@ -16,14 +16,14 @@ massively parallel systems. Vampir handles terabytes of data via parallel1
 preprocessing and data reduction techniques during collection. HPCToolkit
 maintains interactivity of its views by sampling the data rather than on-demand
 processing during panning and zooming. Both tools focus on parallel software to
-highlight performance and communication issues. In contrast, the intention
+highlight performance and communication issues. In contrast, the intention of
 Parceive is to aid with parallelization of legacy applications.
 
-When looking at visualizations of reverse engineering frameworks, Moose
-certainly belongs to the most prominent ones~\cite{Moose}. It provides a set of
-services including a common meta-model, metric evaluations, a model repository,
-and generic GUI support for querying, browsing and grouping. Metric results can
-arbitrarily visualized by a set of views, e.g., polymetric views, evolution
-matrices, or butterfly views. Though the functionality of Moose by far exceeds
-the one of our tool, we often rely on highly optimized search strategies (e.
-g., deep dependency analysis) and individual views.
+Moose certainly belongs to the most prominent reverse engineering
+frameworks~\cite{Moose}. It provides a set of services including a common
+meta-model, metric evaluations, a model repository, and generic GUI support for
+querying, browsing and grouping. Metric results can arbitrarily visualized by a
+set of views, e.g., polymetric views, evolution matrices, or butterfly views.
+Though the functionality of Moose by far exceeds the one of our tool, we often
+rely on highly optimized search strategies (e.g., deep dependency analysis) and
+specialized views for parallelization.

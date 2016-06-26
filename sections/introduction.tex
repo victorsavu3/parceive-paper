@@ -7,31 +7,30 @@ are forced to parallelize their legacy applications to make them scalable. Such
 a parallelization relies on two essential steps. The first step is to
 comprehend the software's structure as well as its dynamic behavior. The second
 step is a potential redesign of the software to enable parallelism.
-Unfortunately, both steps are tedious and error-prone for which reason most
-legacy applications still operate sequentially. Besides the additional
-complexity of parallel programming, we believe the problem largely arises from
-a lack of appropriate tools that support developers and architects in analyzing
+Unfortunately, both steps are tedious and error-prone so most legacy
+applications still operate sequentially. We believe this problem arises not
+only from the additional complexity of parallel programming but also from a
+lack of appropriate tools that support developers and architects in analyzing
 their software.
 
-In the field of reverse engineering, software analysis tools are invaluable to
-understand the structural and behavioral aspects of complex software. These
-tools gather necessary data using static (at compilation time) or dynamic
-(at runtime) analysis approaches and visualize this data for manual
-interpretation. Dynamic analysis yields precise information about concrete
-runtime events, whereas static analysis conservatively reasons over possible
-behaviors by examining the source code. It has been reported that hybrid
-approaches provide high accuracy and soundness of the
-analyses~\cite{StaticDynamic}. We implemented a tool called \emph{Parceive}
-that combines static and dynamic analyses to provide effective views for
-parallelization~\cite{Parceive}.
+In the field of reverse engineering, software analysis tools are invaluable for
+understanding the structural and behavioral aspects of complex software. These
+tools gather necessary data using static (at compilation time) or dynamic (at
+runtime) analysis approaches and visualize this data for manual interpretation.
+Dynamic analysis yields precise information about concrete runtime events,
+whereas static analysis conservatively reasons over possible behaviors by
+examining the source code. It has been reported that hybrid approaches provide
+highly accurate and sound analyses~\cite{StaticDynamic}. We implemented a tool
+called \emph{Parceive} that combines static and dynamic analyses to provide
+effective views for parallelization~\cite{Parceive}.
 
-In the following, we present the underlying visualization framework and
-selected views of Parceive. Our framework enables efficient analyses on large
-traces to answer elaborate user queries. We further support an easy integration
-of tailored views by providing a common interface to them. This allows to
-address a variety of viewpoints without writing highly specific analyses.
-Various optimization and abstraction techniques in the visualization
-infrastructure ensure responsiveness and scalability, e.g., by on-demand
-loading, caching, trace abstraction, and communication across views. The views
-we present enable users to detect hotspots, infer parallelization strategies,
-and validate these strategies regarding data dependencies.
+In this paper, we outline the underlying visualization framework and selected
+views of Parceive. Our framework enables efficient analyses on large traces to
+answer elaborate user queries. We further support an easy integration of
+tailored views by providing a common interface to them. This allows use of a
+variety of viewpoints without writing highly specific analyses. Various
+optimization and abstraction techniques in the visualization infrastructure
+ensure responsiveness and scalability, e.g., by on-demand loading, caching,
+trace abstraction, and communication across views. The views we present enable
+users to detect hotspots, infer parallelization strategies, and validate these
+strategies regarding data dependencies.

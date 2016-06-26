@@ -26,6 +26,9 @@ showspaces=false,
 showtabs=false,
 breaklines=true,
 captionpos=b,
+numbers=left,                    % where to put the line-numbers
+numbersep=-4pt,                   % how far the line-numbers are from the code
+numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
 frame=single,                    % adds a frame around the code
 showstringspaces=false,
 breakatwhitespace=true,
@@ -72,12 +75,12 @@ title=\lstname
 Since the advent of multicore processors, developers struggle with the
 parallelization of legacy software. Automatic methods are only appropriate to
 identify parallelism at instruction level or within simple loops. For most
-applications, however, a scalable refactoring requires profound comprehension
+applications, however, a scalable redesign require profound comprehension
 of the underlying software architecture and its dynamic aspects. This leads to
 an increasing demand for interactive tools that foster parallelization at
 various granularity levels. To cope with this problem, we propose a
-visualization framework and three tailored views for parallelism detection. The
-framework is part of \emph{Parceive}, a tool that utilizes dynamic binary
+visualization framework, and three tailored views for parallelism detection.
+The framework is part of \emph{Parceive}, a tool that utilizes dynamic binary
 instrumentation to trace C/C++ and C\# programs. The cooperative views allow
 identification and analysis of potential parallelism scenarios using seamless
 navigation, abstraction, and filtering. In this paper, we motivate our

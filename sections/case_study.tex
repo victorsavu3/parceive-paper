@@ -1,31 +1,17 @@
 \section{Case Study: EMSim}
 \label{sec:case_study}
-In this section, we demonstrate Parceive by applying it on EMSim, a simulator
-for the european soccer championship. EMSim was part of the student assignments
-for our Master course on parallel programming. The application simulates every
-match of the group and final phase by relying on historical statistics of
-matches, teams, and players. The task was to parallelize the sequential
-C code, by considering the following steps: (1) the comprehension of EMSim and
-its behaviour, (2) the location of hotspots, (3) the identification of
-dependencies, and (4) the parallelization of potential code regions with
-appropriate libraries. When done, the students were able to upload their source
-code on our submission server to check for correctness and speedup. As it
-turned out, the biggest challenges were to estimate the load balance and to
-identify data dependencies. In the following, we show how Parceive would have
-helped the students with both issues.
-
-In listing \ref{listing:playEM}, we present an excerpt of the EMSim code that
-contains a major region for parallelism. The shown \texttt{playEM()} function
-gets multiple arrays of teams as input, one for each group of the championship.
-Herein, the loop in line 7 calls \texttt{playGroup()} for every group, which
-plays all group matches between the given teams and returns the first, second,
-and third winners. This loop accounts for \textasciitilde60\% of the overall
-runtime of an execution. Even though students might spot the loop as a
-potential opportunity for parallelism, the crux is to analyze dependencies
-between the calls. The first challenge is to understand the pointer arithmetic
-in line 10 and 11, which scatter qualified teams to the successor array. The
-second challenge is to inspect the (arbitrary deep) call hierarchies for shared
-memory accesses.
+In this section, we demonstrate Parceive by applying it to EMSim, a simulator
+for the European soccer championship. EMSim was part of the student assignments
+for a master course on parallel programming. The application simulates all
+matches of the group and final phase by relying on historical statistics of
+results, teams, and players. The task was to parallelize the sequential C code
+by considering the following steps: (1) the comprehension of EMSim and its
+behavior, (2) the location of hotspots, (3) the identification of dependencies,
+and (4) the parallelization with appropriate libraries. The students were able
+to upload their source code to a submission server for checking correctness and
+speedup. As it turned out, the biggest challenges were to estimate the load
+balance and to identify data dependencies. In the following, we show
+that Parceive helps with both issues.
 
 \begin{lstlisting}[caption=A major region for loop-parallelism in the
 EMSim code, label=listing:playEM]
@@ -40,59 +26,68 @@ EMSim code, label=listing:playEM]
   }
 \end{lstlisting}
 
-We applied Parceive on EMSim by tracing the optimized user binaries (gcc
-compiler flag \texttt{-og}). Other libraries that are used by EMSim were not
-instrumented since we can preclude conflicting accesses with the user
-application. The instrumentation framework and the analyses cause an execution
-slowdown of factor \textasciitilde 4.4 (20s instead of 4,5s). The produced
-trace data has a size of 4.3Mb, where data about memory accesses and function
-invocations account for 84\% of the size. After producing the trace database,
-we can import it to our visualization and show the resulting views.
+Listing \ref{listing:playEM} depicts an excerpt of the EMSim code that contains
+a major region for parallelism. The shown loop is part of the \texttt{playEM()}
+function that gets arrays of teams as input, one per group of the championship.
+Every iteration calls \texttt{playGroup()} for each group, which plays the
+matches between the given teams and returns the first, second, and third
+winning team. This loop accounts for \textasciitilde60\% of the overall
+runtime. Even though the loop is easily identified as an opportunity for
+parallelization, the crux is to analyze dependencies between the calls. The
+first challenge is to understand the pointer arithmetic in lines 5 and 6, which
+scatters qualified teams to the successor array. The second challenge is to
+inspect the (arbitrarily deep) call hierarchies for accesses to the same memory
+locations.
 
-The trace view that depicts the EMSim execution is shown on the upper part
-of Figure \ref{fig:emsim}. By doing a top-down inspection, it becomes obvious
-that \texttt{main()} spends most of the time in the invocation of
-\texttt{playEM()}. Within this function call, the execution time is mainly
-spent in two loops. The first loop (the one from Listing \ref{listing:playEM})
-performs the group phase. The second loop plays the final rounds, starting from
-the round of 16 to the final match.
+We applied Parceive to EMSim by tracing an execution of the optimized user
+binaries. The instrumentation framework and the runtime analyses caused an
+execution slowdown factor of \textasciitilde 4.4 (20s instead of 4,5s). The
+produced trace data had a size of 4.3Mb, where data about memory accesses and
+function invocations account for 84\% of the size. After producing the trace
+database, we imported it to our visualization infrastructure.
 
-Recall the two main purposes of the trace view, identifying hotspots
+The trace view that depicts the execution of EMSim is shown in Figure
+\ref{fig:emsim}. The call of \texttt{main()} spends most of the time in the
+invocation of \texttt{playEM()}. Within this function call, the execution time
+is mainly spent in two loops. The first loop (the one from
+Listing~\ref{listing:playEM}) simulates the group phase. The second loop
+simulates the final rounds, from the round of 16 to the final match.
+
+Recall the two main purposes of the trace view, namely identifying hotspots
 and estimating load balance. In the case of EMSim, the view indicates the
-invocations of \texttt{playGroup()} and \texttt{playFinalRound} as significant
-hotspots. Without considering dependencies, a naive strategy could invoke the
-single calls by individual threads. Besides limited scalability (there are only
-6 calls of \texttt{playGroup()}), this solution results in a non-optimal load
-balance since the calls vary in their execution time. But the trace view
-exposes another opportunity for parallelism. Both the group matches and the
-final matches lead to distinct calls of \texttt{playMatchGeneral()}. Hence,
-a second strategy is to use a master-worker pattern for scheduling these calls
-tron a thread-pool. The next step for the user is to validate the found
+invocations of \texttt{playGroup()} and \texttt{playFinalRound()} as
+significant hotspots. Without considering dependencies, a naive strategy is to
+invoke the single calls by individual threads. Besides limited scalability
+(there are only 6 calls of \texttt{playGroup()}), this solution results in a
+non-optimal load balance since the calls vary in their execution time. However,
+the trace view exposes another opportunity for parallelism. Both the group
+matches and the final matches lead to distinct calls of
+\texttt{playMatchGeneral()} (not shown due to space constraints). Hence, a
+second strategy is to use a master-worker pattern for scheduling these calls
+with a thread-pool. The next step for the user is to validate the found
 parallelization strategies.
 
-The CCT view supports users with the validation of prospective system
-redesigns. We present the resulting view for EMSim in Figure \ref{fig:emsim}.
-Notice that only relevant call nodes for the investigated parallelization
-strategies are shown by spotting them on the trace view. Beginning with the
-first strategy, we are interested in possible data dependencies between the
-invocations of \texttt{playGroup()} and \texttt{playFinalMatch()},
-respectively. The corresponding analysis (\textit{show deep dependencies})
-queries shared accesses among full call hierarchies. It turns out that each
+The CCT view supports users with the validation of prospective refactorings. 
+Figure \ref{fig:cct_view} shows the resulting view for EMSim. Notice that
+only relevant call nodes for the investigated parallelization strategies are
+shown by spotting them on the trace view. Beginning with the first strategy, we
+are interested in possible data dependencies between the invocations of
+\texttt{playGroup()} and \texttt{playFinalMatch()}, respectively. The
+corresponding analysis (\textit{show deep dependencies}) queries accesses 
+to common memory locations among full call hierarchies. It turns out that each
 invocation of \texttt{playGroup()} accesses the global variable
-\texttt{groupGoals} and each of invocation of \texttt{playFinalMatch()}
-accesses the stack variables \texttt{goals1} and \texttt{goals2}.
-Furthermore, the cct view enables to localize these memory accesses such that
-the dependencies can be investigated and synchronized.
-
+\texttt{groupGoals} and each invocation of \texttt{playFinalMatch()} accesses
+the stack variables \texttt{goals1} and \texttt{goals2}. Furthermore, the CCT
+view enables us to localize these memory accesses in the source code so that
+the dependencies can be resolved.
 
 Even though the data dependencies for the first parallelization strategy
-can be easily avoided, we focus on the other strategy that put the calls to
-\texttt{playMatchGeneral()} in distinct tasks. The respective CCT view is shown
-in Figure \ref{fig:emsim}. Performing the same dependency analysis as
-before returns no shared memory accesses between the calls. Hence, the user
-gained the necessary information to parallelize EMSim by integrating the
-master-worker pattern. A student solution achieved a speedup of 6.5 on our
+can be easily avoided, we focus on the second strategy that puts the calls to
+\texttt{playMatchGeneral()} in distinct tasks. Performing the same dependency
+analysis as before returns no shared memory accesses between the calls. Hence,
+the user gained the necessary information to parallelize EMSim by integrating
+the master-worker pattern. A student solution achieved a speedup of 6.5 on our
 8-core system. Considering the sequential pre- and post-processing regions,
 and the control dependent matches of the final phase (e.g., the semi-final has 
-to be played before the final), this speedup confirms Amdahl's law. This result
-concludes that our views are very helpful to parallelize user applications.
+to be played before the final), the gained speedup confirms Amdahl's law. These
+results conclude that our views are very helpful for parallelization.

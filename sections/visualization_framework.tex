@@ -1,7 +1,7 @@
 \section{Visualization Infrastructure}
 In this section, we present certain key aspects of our web-based visualization
 infrastructure. This infrastructure facilitates the integration of arbitrary
-views to Parceive by providing a common interface for accessing abstracted
+views into Parceive by providing a common interface for accessing abstracted
 runtime traces. The biggest challenge when dealing with traces is the
 potentially overwhelming amount of data. This often leads to unmanageable views
 with unacceptable delays. Our visualization infrastructure addresses this
@@ -49,8 +49,8 @@ unmanageable amount of trace data.
 At the client side, we provide an Object Relational Mapper (ORM) module to
 simplify development and improve responsiveness. This module enables accesses
 to predefined entities and manages the relationships between them. The API is
-implemented using promises~\cite{promises} which simplify asynchronous and
-parallel access. The greatest benefit for views using the ORM are optimizations
+implemented using promises~\cite{promises}, which simplify asynchronous and
+parallel access. The greatest benefit of views using ORM are optimizations
 for data loading, the most important ones being caching and pipelining. Caching
 avoids repeated loading of data that was accessed before, and pipelining
 combines multiple queries to the same endpoint into a single one. When
@@ -59,13 +59,13 @@ throughput with only small latency overhead.
 
 \paragraph{State Management and Communication}
 The visualization framework provides global state management and communication
-facilities to views. The former is based on a centralized and persistent state
+facilities for views. The former is based on a centralized and persistent state
 storage that retains the state of views across page loads. Currently,
 the view layout and the marked nodes are automatically stored as part of the
 state. In addition, each view can save tailored information at any time and
 retrieve it during rendering. Local storage is used to keep all the state
-information making it persistent. This service reduces computational effort for
-views by reusing results across arbitrary UI events.
+information, making it persistent. This service reduces computational effort
+for views by reusing results across UI events.
 
 The communication service enables arbitrary views to interact by triggering
 predefined events. These events let users explore their applications with
@@ -73,15 +73,25 @@ synchronized representations from complementary viewpoints. One example is
 simultaneous highlighting of entities such as functions in different views.
 Another example is spotting of distinct entities for further inspection in
 separate views. This way, the number of nodes to be displayed in a view is
-reduced which increases scalability. Currently there the following types of
+reduced, which increases scalability. Currently the following types of
 communication provided:
 
 \begin{itemize}
 	\item \textit{Focusing} brings entities to the attention of the user by
 centering the representations in all views.
-	\item \textit{Marking} allows to communicate selected entities between views.
+	\item \textit{Marking} allows to share selected entities between views.
 	\item \textit{Spotting} replaces the shown entities in views by a new
 collection of entities.
 	\item \textit{Hovering} highlights entities in multiple views by reducing the
 opacity of all other entities.
 \end{itemize}
+
+\begin{figure*}[ht!]
+	\begin{center}
+		\includegraphics[clip, trim=0.1cm 16.0cm 0.1cm 0.1cm,
+width=\linewidth]{img/performance_view.pdf}
+		\caption{The performance view of Parceive (trace mode) showing an execution
+of EMSim.}
+		\label{fig:emsim}
+	\end{center}
+\end{figure*}
