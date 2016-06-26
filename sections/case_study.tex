@@ -3,15 +3,14 @@
 In this section, we demonstrate Parceive by applying it to EMSim, a simulator
 for the European soccer championship. EMSim was part of the student assignments
 for a master course on parallel programming. The application simulates all
-matches of the group and final phase by relying on historical statistics of
-results, teams, and players. The task was to parallelize the sequential C code
-by considering the following steps: (1) the comprehension of EMSim and its
-behavior, (2) the location of hotspots, (3) the identification of dependencies,
-and (4) the parallelization with appropriate libraries. The students were able
-to upload their source code to a submission server for checking correctness and
-speedup. As it turned out, the biggest challenges were to estimate the load
-balance and to identify data dependencies. In the following, we show
-that Parceive helps with both issues.
+matches by relying on historical statistics of results, teams, and players. The
+task was to parallelize the sequential C code by considering the following
+steps: (1) the comprehension of EMSim and its behavior, (2) the location of
+hotspots, (3) the identification of dependencies, and (4) the parallelization
+with appropriate libraries. The students were able to upload their source code
+to a submission server for checking correctness and speedup. As it turned out,
+the biggest challenges were to estimate the load balance and to identify data
+dependencies. In the following, we show that Parceive helps with both issues.
 
 \begin{lstlisting}[caption=A major region for loop-parallelism in the
 EMSim code, label=listing:playEM]
@@ -26,18 +25,18 @@ EMSim code, label=listing:playEM]
   }
 \end{lstlisting}
 
-Listing \ref{listing:playEM} depicts an excerpt of the EMSim code that contains
-a major region for parallelism. The shown loop is part of the \texttt{playEM()}
-function that gets arrays of teams as input, one per group of the championship.
-Every iteration calls \texttt{playGroup()} for each group, which plays the
-matches between the given teams and returns the first, second, and third
-winning team. This loop accounts for \textasciitilde60\% of the overall
-runtime. Even though the loop is easily identified as an opportunity for
-parallelization, the crux is to analyze dependencies between the calls. The
-first challenge is to understand the pointer arithmetic in lines 5 and 6, which
-scatters qualified teams to the successor array. The second challenge is to
-inspect the (arbitrarily deep) call hierarchies for accesses to the same memory
-locations.
+Listing \ref{listing:playEM} is an excerpt of the EMSim code that contains a
+major region for parallelism. The shown loop is contained in the
+\texttt{playEM()} function, which gets arrays of teams as input. Every
+iteration calls \texttt{playGroup()} for each group of the preliminary round,
+which simulates the matches between the given teams and returns the first,
+second, and third winning team. This loop accounts for \textasciitilde60\% of
+the overall runtime. Even though the loop is easily identified as an
+opportunity for parallelization, the crux is to analyze dependencies between
+the calls. The first challenge is to understand the pointer arithmetic in lines
+5 and 6, which scatters qualified teams to the successor array. The second
+challenge is to inspect the (arbitrarily deep) call hierarchies for accesses to
+common memory locations.
 
 We applied Parceive to EMSim by tracing an execution of the optimized user
 binaries. The instrumentation framework and the runtime analyses caused an
@@ -49,8 +48,8 @@ database, we imported it to our visualization infrastructure.
 The trace view that depicts the execution of EMSim is shown in Figure
 \ref{fig:emsim}. The call of \texttt{main()} spends most of the time in the
 invocation of \texttt{playEM()}. Within this function call, the execution time
-is mainly spent in two loops. The first loop (the one from
-Listing~\ref{listing:playEM}) simulates the group phase. The second loop
+is mainly spent within two loops. The first loop (the one from
+Listing~\ref{listing:playEM}) simulates the preliminary round. The second loop
 simulates the final rounds, from the round of 16 to the final match.
 
 Recall the two main purposes of the trace view, namely identifying hotspots
@@ -84,10 +83,11 @@ the dependencies can be resolved.
 Even though the data dependencies for the first parallelization strategy
 can be easily avoided, we focus on the second strategy that puts the calls to
 \texttt{playMatchGeneral()} in distinct tasks. Performing the same dependency
-analysis as before returns no shared memory accesses between the calls. Hence,
-the user gained the necessary information to parallelize EMSim by integrating
-the master-worker pattern. A student solution achieved a speedup of 6.5 on our
-8-core system. Considering the sequential pre- and post-processing regions,
-and the control dependent matches of the final phase (e.g., the semi-final has 
-to be played before the final), the gained speedup confirms Amdahl's law. These
-results conclude that our views are very helpful for parallelization.
+analysis as before returns no shared memory accesses between the calls (not
+shown due to space constraints). Hence, the user gained the necessary
+information to parallelize EMSim by integrating the master-worker pattern. A
+student solution achieved a speedup of 6.5 on our 8-core system. Considering
+the sequential pre- and post-processing regions, and the control dependent
+matches of the final phase (e.g., the semi-final has to be played before the
+final), the gained speedup confirms Amdahl's law. These results conclude that
+our views are very helpful for parallelization.
