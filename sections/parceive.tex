@@ -23,11 +23,11 @@ correct parallelization.
 Figure \ref{fig:parceive_overview} depicts the fundamental components of
 Parceive and their relations. Our analyses operate on executables to retrieve
 the required information. These analyses can be classified as static or dynamic
-ones. The former inspect the data- and control-flow of single linkage objects.
-By incorporating debug symbols, static analysis enables our tool to gather
+ones. The former inspect the data- and control-flow of linked binary images. By
+incorporating debug symbols, static analysis enables our tool to gather
 information about variable accesses, loop constructs, and class hierarchies.
-Additionally, the gathered information is used to restrict the scope of
-subsequent runtime analysis in order to reduce the execution overhead.
+Moreover, the gathered information is used to restrict the scope of
+the subsequent runtime analysis in order to reduce the execution overhead.
 
 Parceive instruments and inspects user applications on predefined events, e.g.,
 object instantiations, method invocations, and thread handling (in case of

@@ -26,7 +26,7 @@ EMSim code, label=listing:playEM]
 \end{lstlisting}
 
 Listing \ref{listing:playEM} is an excerpt of the EMSim code that contains a
-major region for parallelism. The shown loop is contained in the
+major opportunity for parallelism. The shown loop is contained in the
 \texttt{playEM()} function, which gets arrays of teams as input. Every
 iteration calls \texttt{playGroup()} for each group of the preliminary round,
 which simulates the matches between the given teams and returns the first,
@@ -35,7 +35,7 @@ the overall runtime. Even though the loop is easily identified as an
 opportunity for parallelization, the crux is to analyze dependencies between
 the calls. The first challenge is to understand the pointer arithmetic in lines
 5 and 6, which scatters qualified teams to the successor array. The second
-challenge is to inspect the (arbitrarily deep) call hierarchies for accesses to
+challenge is to inspect the (arbitrarily deep) call paths for accesses to
 common memory locations.
 
 We applied Parceive to EMSim by tracing an execution of the optimized user
@@ -73,7 +73,7 @@ shown by spotting them on the trace view. Beginning with the first strategy, we
 are interested in possible data dependencies between the invocations of
 \texttt{playGroup()} and \texttt{playFinalMatch()}, respectively. The
 corresponding analysis (\textit{show deep dependencies}) queries accesses 
-to common memory locations among full call hierarchies. It turns out that each
+to common memory locations among full call paths. It turns out that each
 invocation of \texttt{playGroup()} accesses the global variable
 \texttt{groupGoals} and each invocation of \texttt{playFinalMatch()} accesses
 the stack variables \texttt{goals1} and \texttt{goals2}. Furthermore, the CCT
@@ -83,11 +83,11 @@ the dependencies can be resolved.
 Even though the data dependencies for the first parallelization strategy
 can be easily avoided, we focus on the second strategy that puts the calls to
 \texttt{playMatchGeneral()} in distinct tasks. Performing the same dependency
-analysis as before returns no shared memory accesses between the calls (not
-shown due to space constraints). Hence, the user gained the necessary
+analysis as before returns no shared memory accesses between these calls (not
+shown due to space constraints). Hence, the user gains the necessary
 information to parallelize EMSim by integrating the master-worker pattern. A
 student solution achieved a speedup of 6.5 on our 8-core system. Considering
-the sequential pre- and post-processing regions, and the control dependent
-matches of the final phase (e.g., the semi-final has to be played before the
-final), the gained speedup confirms Amdahl's law. These results conclude that
-our views are very helpful for parallelization.
+some sequential pre- and post-processing steps, and the control dependencies
+between certain matches (e.g., the semi-final has to be played before the
+final), the gained speedup confirms Amdahl's law~\cite{amdahl}. These results
+conclude that our views are very helpful for parallelization.

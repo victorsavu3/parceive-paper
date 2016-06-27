@@ -17,10 +17,10 @@ profiling. The tracing mode represents an icicle plot augmented with loop
 information, i.e., a hierarchical view of calls made during program execution.
 The calls are arranged chronologically from left to right, and the visibility
 of loop information can be toggled (on or off). Trace visualization is useful
-for detailed examination of a program, especially when the traced invocation
-order is important. The profiling mode presents the user a hierarchical view of
-the functions called during execution. The length of each function in the view
-is given by the sum of the calls' execution time, which is often sufficient to
+for detailed examination of a program, especially when the invocation order is
+important. The profiling mode presents the user a hierarchical view of the
+functions called during execution. The length of each function in the view is
+given by the sum of the calls' execution time, which is often sufficient to
 quickly pinpoint hot spots.
 
 As a program's size and complexity increases, so does the quantity of its
@@ -31,7 +31,7 @@ loaded. The minimum value depends on the percentage of the execution time of
 the current top-level call in the view. This only allows the rendering of calls
 coarse enough to be easily visible. With the call zooming feature, users can
 focus on a specific call, which makes it the top-level call, recomputes a new
-minimum value, and loads child calls of the focused call that weren't visible
+minimum value, and loads child calls of the focused call that weren't displayed
 before.
 
 \subsection{Calling Context Tree (CCT) View}
@@ -40,8 +40,8 @@ It displays a calling context tree consisting of call nodes, loop nodes, and
 memory nodes (see Figure \ref{fig:cct_view}). Nodes for calls (or groups of
 calls), loop executions, and loop iterations are positioned using a tidy tree
 layout~\cite{TidierTree}. Children of nodes are vertically sorted by their
-start time to reflect their actual execution. Memory nodes accessed by
-arbitrary tree nodes are difficult to integrate in a tree layout. Therefore,
+start time to reflect their execution time. Memory nodes accessed by
+arbitrary tree nodes can not be integrated in a tree layout. Therefore,
 they are positioned using an unconstrained layout based on a force simulation
 around the rest of the tree.
 
@@ -77,18 +77,18 @@ scalability and help developers parallelizing their code:
 colors.
 	\item Expanding and collapsing nodes can be performed in both
 directions to show and hide parent or child nodes.
-	\item Seamless zooming or panning, and focusing on single entity nodes for
-a clear visualization.
+	\item Seamless zooming, panning, and focusing on single entity nodes for a
+better user experience.
 	\item Spotting of arbitrary call nodes, which automatically expands the call
 tree so that it ends with these nodes and starts with their common ancestor.
 \end{itemize}
 
 \subsection{Source View}
-The source view shows provided source code of the instrumented application. The
-usefulness of this view becomes apparent when it is communicating with the
-other views presented in this paper. The simplest form of interaction is
-focusing, where the source view displays functions, loops, and memory accesses.
-Focusing makes it easy to follow the execution of a program trough the source
-code. Hovering provides additional information; for calls it indicates where
-the call originated, and for memory references where they were allocated and
-referenced.
+The source view shows the source code of the instrumented application, if
+available. The usefulness of this view becomes apparent when it is
+communicating with the other views presented in this paper. The simplest form
+of interaction is focusing, where the source view displays functions, loops,
+and memory accesses. Focusing makes it easy to follow the execution of a
+program trough the source code. Hovering provides additional information; for
+calls it indicates where the call originated, and for memory references where
+they were allocated and referenced.
