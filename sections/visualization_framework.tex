@@ -25,13 +25,13 @@ time to complete without applying certain optimizations on the trace database.
 Hence, we perform a set of optimizations during a post-processing step to
 reduce lookup times for views.
 
-The most important optimization is the generation of table indices for
-to improve the query performance. Another optimization is the creation of
-intermediate tables to avoid expensive joins for most queries. Although this
-leads to redundancy, it does not increase the overall complexity.
-Furthermore, reducing fragmentation within tables increases data locality and
-thus speeds up queries. This has considerable effect on queries that require a
-full table scan and also reduces the size of the trace database.
+The most important optimization is the generation of table indices to improve
+the query performance. Another optimization is the creation of intermediate
+tables to avoid expensive joins for most queries. Although this leads to
+redundancy, it does not increase the overall complexity. Furthermore, reducing
+fragmentation within tables increases data locality and thus speeds up queries.
+This has considerable effect on queries that require a full table scan and also
+reduces the size of the trace database.
 
 \paragraph{On-Demand Loading}
 On-demand loading of trace data improves responsiveness of the visualization.
@@ -74,7 +74,7 @@ simultaneous highlighting of entities such as functions in different views.
 Another example is spotting of distinct entities for further inspection in
 separate views. This way, the number of nodes to be displayed in a view is
 reduced, which increases scalability. Currently the following types of
-communication provided:
+communication are provided:
 \begin{itemize}
 	\item \textit{Focusing} brings entities to the attention of the
 user by centering the representations in all views.
